@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, List, Union
 
 from sqlalchemy import Column, Integer, String, DateTime, func, FLOAT, create_engine, select
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -60,11 +60,15 @@ class StockDao:
     def __init__(self, db_engine):
         self.db_engine = db_engine
 
-    def save_company(self, comp: CompanyInfoEntity):
+    def save_company(self, comp: Union[CompanyInfoEntity, List[CompanyInfoEntity]]):
         """保存公司信息. 如果存在,更新
         """
         with sessionmaker(self.db_engine)() as session:
-            session.merge(comp)
+            if not isinstance(comp, list):
+                comp = [comp]
+
+            for c in comp:
+                session.merge(c)
             session.commit()
 
     def get_company_by_code(self, code: str) -> CompanyInfoEntity:
@@ -80,7 +84,7 @@ class StockDao:
         st1 = select(SelectedCompanyEntity).order_by(SelectedCompanyEntity.order)
         with sessionmaker(self.db_engine)() as session:
             for s_comp in session.scalars(st1):
-                comp = self.getCompany_by_code(s_comp.code)
+                comp = self.get_company_by_code(s_comp.code)
                 consumer(comp)
 
     def iter_all_company(self, consumer: Callable[[CompanyInfoEntity], None]):

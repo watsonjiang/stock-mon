@@ -3,6 +3,8 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
+from stockmon.model import StockDao
+
 
 class StockMonApplication():
     """
@@ -37,14 +39,13 @@ class StockMonApplication():
         return os.path.dirname(__file__)
 
     @classmethod
-    def get_res_path(cls, filename):
+    def get_res_path(cls, filename) -> str:
         """
         获取资源文件绝对地址.
         """
         return os.path.join(cls.get_base_dir(), cls.DIR_RESOURCE, filename)
 
-    def get_stock_dao(self):
+    def get_stock_dao(self) -> StockDao:
+        """获取StockDao实例
+        """
         return self.stock_dao
-
-    def get_hq_dao(self):
-        return self.hq_dao
