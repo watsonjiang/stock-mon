@@ -1,6 +1,6 @@
 from typing import Callable, List, Union
 
-from sqlalchemy import Column, Integer, String, DateTime, func, FLOAT, create_engine, select
+from sqlalchemy import Column, Integer, String, DateTime, func, FLOAT, create_engine, select, delete
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 Base = declarative_base()
@@ -20,7 +20,7 @@ class SelectedCompanyEntity(Base):
     """
     __tablename__ = 't_select_company'
 
-    code = Column(Integer, primary_key=True)
+    code = Column(String, primary_key=True)
     order = Column(Integer)  # 在列表中的排序, 0开始
 
 
@@ -69,6 +69,22 @@ class StockDao:
 
             for c in comp:
                 session.merge(c)
+            session.commit()
+
+    def update_selected_company(self, comps: List[CompanyInfoEntity]):
+        self.clear_selected_company()
+        with sessionmaker(self.db_engine)() as session:
+            for idx, c in enumerate(comps):
+                s = SelectedCompanyEntity(code=c.code, order=idx)
+                session.add(s)
+            session.commit()
+
+    def clear_selected_company(self):
+        """清空选择列表
+        """
+        with sessionmaker(self.db_engine)() as session:
+            st = delete(SelectedCompanyEntity)
+            session.execute(st)
             session.commit()
 
     def get_company_by_code(self, code: str) -> CompanyInfoEntity:

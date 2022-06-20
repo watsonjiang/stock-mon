@@ -61,7 +61,7 @@
     <widget class="QListWidget" name="stock_list"/>
    </item>
    <item row="2" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
+    <widget class="QDialogButtonBox" name="btn_box">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -75,7 +75,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>btn_box</sender>
    <signal>accepted()</signal>
    <receiver>Dialog</receiver>
    <slot>accept()</slot>
@@ -91,7 +91,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>btn_box</sender>
    <signal>rejected()</signal>
    <receiver>Dialog</receiver>
    <slot>reject()</slot>
