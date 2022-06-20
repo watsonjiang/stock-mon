@@ -1,2 +1,4 @@
-# stock-mon
-a small app monitoring the stock price changes.
+=== 办公室看盘软件
+
+1 系统栏图标
+2 点击股票行情列表
